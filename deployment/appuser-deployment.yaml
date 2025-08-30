@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appuser-poc-deployment
+  labels:
+    app: appuser-poc
+  annotations:
+    kubernetes.io/change-cause: "Version 1.0 Deployed"
+spec:
+  selector:
+    matchLabels:
+      app: appuser-poc
+  template:
+    metadata:
+      labels:
+        app: appuser-poc
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "9082"
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: appuser-poc
+          image: 418295709911.dkr.ecr.us-east-1.amazonaws.com/appuser:1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: appuser-poc-config-map
+            - secretRef:
+                name: mysql-secret
+          resources:
+            requests:
+              cpu: "700m"
+              memory: "1Gi"
+            limits:
+              cpu: "1000m"
+              memory: "2Gi"
