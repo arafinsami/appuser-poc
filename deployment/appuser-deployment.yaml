@@ -14,12 +14,7 @@ spec:
     metadata:
       labels:
         app: appuser-poc
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/path: "/actuator/prometheus"
-        prometheus.io/port: "9082"
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
         - name: appuser-poc
           image: 418295709911.dkr.ecr.us-east-1.amazonaws.com/appuser:1.0
